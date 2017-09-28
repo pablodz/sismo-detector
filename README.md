@@ -7,4 +7,4 @@
 <p>
 Este proyecto esta enfocado a un funcionamiento normal cuando cuente con muchos sensores
 </p>
-<img align=center src="http://oldcoder.org/distro/ssdistro/ss-octave-sombrero.png/>
+<img align=center src="http://oldcoder.org/distro/ssdistro/ss-octave-sombrero.png" />
