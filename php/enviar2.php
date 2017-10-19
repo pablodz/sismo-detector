@@ -1,5 +1,5 @@
 <?php
-$con = mysqli_connect('35.193.73.44','root','123456');
+$con = mysqli_connect('ipCloud','root','123456');
 
 
 if(!$con)
