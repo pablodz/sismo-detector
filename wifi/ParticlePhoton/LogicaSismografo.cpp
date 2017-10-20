@@ -28,15 +28,16 @@ THE SOFTWARE.
 ===============================================
 */
 
+
 // I2Cdev and MPU6050 must be installed as libraries, or else the .cpp/.h files
 // for both classes must be in the include path of your project
 #include <I2Cdev.h>
 #include <MPU6050.h>
-
+#include <HttpClient.h>
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
 // is used in I2Cdev.h
 #if (I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE) && !defined (PARTICLE)
-    #include "Wire.h"
+#include "Wire.h"
 #endif
 
 // class default I2C address is 0x68
@@ -44,14 +45,24 @@ THE SOFTWARE.
 // AD0 low = 0x68 (default for InvenSense evaluation board)
 // AD0 high = 0x69
 MPU6050 accelgyro;
+HttpClient http;
 //MPU6050 accelgyro(0x69); // <-- use for AD0 high
 
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
-long long int contador=0;
+long int contador=0;
 
-
-
+// Headers currently need to be set at init, useful for API keys etc.
+//===========================================================
+http_header_t headers[] = {
+    //  { "Content-Type", "application/json" },
+    //  { "Accept" , "application/json" },
+    { "Accept" , "*/*"},
+    { NULL, NULL } // NOTE: Always terminate headers will NULL
+};
+http_request_t request;
+http_response_t response;
+//===========================================================
 // uncomment "OUTPUT_READABLE_ACCELGYRO" if you want to see a tab-separated
 // list of the accel X/Y/Z and then gyro X/Y/Z values in decimal. Easy to read,
 // not so easy to parse, and slow(er) over UART.
@@ -129,27 +140,62 @@ void loop() {
 
     #ifdef OUTPUT_READABLE_ACCELGYRO
         // display tab-separated accel/gyro x/y/z values
-        Serial.print(contador); Serial.print("a/g:\t");
+      //  Serial.print(contador); Serial.print("a/g:\t");
+      //Spark.publish("acelx", String(gx));
+    //  Spark.publish("acely", String(gy));
+    //  Spark.publish("acelz", String(gz));
+    //  Spark.publish("gx", String(gx) );
+      //Spark.publish("gy", String(gy) );
+    //  Spark.publish("gz", String(gz) );
+          /*
         Serial.print(ax); Serial.print("\t");
         Serial.print(ay); Serial.print("\t");
         Serial.print(az); Serial.print("\t");
         Serial.print(gx); Serial.print("\t");
         Serial.print(gy); Serial.print("\t");
-        Serial.println(gz);
+        Serial.println(gz);*/
     #endif
 
     #ifdef OUTPUT_BINARY_ACCELGYRO
-        Serial.write((uint8_t)(ax >> 8)); Serial.write((uint8_t)(ax & 0xFF));
-        Serial.write((uint8_t)(ay >> 8)); Serial.write((uint8_t)(ay & 0xFF));
-        Serial.write((uint8_t)(az >> 8)); Serial.write((uint8_t)(az & 0xFF));
-        Serial.write((uint8_t)(gx >> 8)); Serial.write((uint8_t)(gx & 0xFF));
-        Serial.write((uint8_t)(gy >> 8)); Serial.write((uint8_t)(gy & 0xFF));
-        Serial.write((uint8_t)(gz >> 8)); Serial.write((uint8_t)(gz & 0xFF));
+        //Serial.write((uint8_t)(ax >> 8)); Serial.write((uint8_t)(ax & 0xFF));
+        //Serial.write((uint8_t)(ay >> 8)); Serial.write((uint8_t)(ay & 0xFF));
+       //Serial.write((uint8_t)(az >> 8)); Serial.write((uint8_t)(az & 0xFF));
+        //Serial.write((uint8_t)(gx >> 8)); Serial.write((uint8_t)(gx & 0xFF));
+        //Serial.write((uint8_t)(gy >> 8)); Serial.write((uint8_t)(gy & 0xFF));
+        //Serial.write((uint8_t)(gz >> 8)); Serial.write((uint8_t)(gz & 0xFF));
     #endif
 
+    //===========================================================
+    Serial.println();
+    Serial.println("Application>\tStart of Loop.");
+    // Request path and body can be set at runtime or at setup.
+    request.hostname = "192.168.1.51";// Local red that host the data
+    request.port = 8080;
+
+    // the path including variables for GET
+    char thedata[64];
+    char *php = "/enviar2.php";
+    char *id = "?id=";
+    char *x = "&x=";
+    char *y = "&y=";
+    char *z = "&z=";
+    sprintf(thedata, "%s%s%s%s%d%s%d%s%d", php, id, "1",x,gx,y,gy,z,gz);
+
+    request.path = thedata;
+    Serial.println();
+    Serial.print(thedata);
+    // Get request
+    http.get(request, response, headers);
+
+    Serial.print("Application>\tResponse status: ");
+    Serial.println(response.status);
+
+    Serial.print("Application>\tHTTP Response Body: ");
+    Serial.println(response.body);
+  //===========================================================
     // blink LED to indicate activity
     blinkState = !blinkState;
     digitalWrite(LED_PIN, blinkState);
-    delay(100);
+    delay(4000);
     contador++;
 }
