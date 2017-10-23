@@ -9,4 +9,4 @@ Este proyecto esta enfocado a un funcionamiento normal cuando cuente con muchos 
 </p>
 <div style="text-align:center"><img align=center src="http://oldcoder.org/distro/ssdistro/ss-octave-sombrero.png" /></div>
 
-<div style="text-align:center"><img align=center src="https://imgur.com/a/vdriy" /></div>
+<div style="text-align:center"><img align=center src="https://i.imgur.com/riNnGs9.jpg" /></div>
