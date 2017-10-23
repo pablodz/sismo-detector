@@ -8,4 +8,4 @@
 Este proyecto esta enfocado a un funcionamiento normal cuando cuente con muchos sensores
 </p>
 <div style="text-align:center"><img align=center src="http://oldcoder.org/distro/ssdistro/ss-octave-sombrero.png" /></div>
-<img align=center src="http://oldcoder.org/distro/ssdistro/ss-octave-sombrero.png" />
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/vdriy"><a href="//imgur.com/vdriy"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
