@@ -33,5 +33,4 @@ else
 {
  echo 'Insertación perfecta +1!';
 }
-//header("refresh:1; url=pucp.html");
 ?>
