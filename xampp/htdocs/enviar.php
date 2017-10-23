@@ -16,14 +16,7 @@ echo $SismoID;
 echo $acelx;
 echo $acely;
 echo $acelz;
-/*
-   $id=isset($_GET['id'])  ;
-    $x=isset($_GET['x']) ;
-    $y=isset($_GET['y']) ;
-    $z=isset($_GET['z']) ;
-*/
-//INSERT INTO `sismo1`.`sismo1_historial` (`SismoID`, `acelx`, `acely`, `acelz`) VALUES ('234', '234234', '23423', '423423');
-//INSERT INTO sismo1_historial (SismoID ,acelx , acely, acelz) VALUES ($SismoID,$acelx, $acely, $acelz)
+
 $sql = "INSERT INTO `sismo1_historial` (`SismoID`, `acelx`, `acely`, `acelz`) VALUES ($SismoID, $acelx, $acely, $acelz)";
 if (!mysqli_query($con,$sql))
 {
