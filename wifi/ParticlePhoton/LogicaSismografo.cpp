@@ -8,9 +8,9 @@ MPU6050 accelgyro;
 HttpClient http;
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
-char* valores[1];
 int valor;
-
+String content = "";
+char character;
 long int contador=0;
 //===========================================================
 http_header_t headers[] = {
@@ -79,19 +79,26 @@ void loop() {
   Serial.println("La lectura de la pagina web...");
   Serial.println(thedata2);
   http.post(request,response,headers);
+
   //Serial.print("Application>\tResponse status: ");
   Serial.println(response.status);
-
   //Serial.print("Application>\tHTTP Response Body: ");
+  content = response.body;
+  //content.concat(character);
+  //Serial.println(String(character));
+  Serial.print(content);
 
-  if ( char*(response.body)=='0')
+  /*
+  if (content=='0')
   {
     valor=0;
-  }else{
+  }
+  else
+  {
     valor=1;
   }
   Serial.println(String(valor));
-
+*/
     //===========================================================
     // blink LED to indicate activity
     blinkState = !blinkState;
