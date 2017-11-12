@@ -88,8 +88,7 @@ void loop() {
   //Serial.println(String(character));
   Serial.print(content);
 
-  /*
-  if (content=='0')
+  if (content[0]=='0')
   {
     valor=0;
   }
@@ -98,7 +97,7 @@ void loop() {
     valor=1;
   }
   Serial.println(String(valor));
-*/
+
     //===========================================================
     // blink LED to indicate activity
     blinkState = !blinkState;
