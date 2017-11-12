@@ -27,27 +27,34 @@ http_response_t response;
 #endif
 
 bool blinkState = false;
+//===========================================================
+// The pins you can use for tone() / noTone() are:
+// D0, D1, A0, A1, A4, A5, A6, A7, RX, TX
+const char tonePins[] = { D0, D1, A0, A1, A4, A5, A6, A7, RX, TX };
 
 void setup() {
-
+    pinMode(tonePins[4],OUTPUT);
     #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
         Wire.begin();
     #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
         Fastwire::setup(400, true);
     #endif
     Serial.begin(38400);
-    Serial.println("Initializing I2C devices...");
+    Serial.println("Inicializando comunicación I2C...");
     accelgyro.initialize();
 
-    Serial.println("Testing device connections...");
-    Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+    Serial.println("Enviando instrucciones I2C...");
+    Serial.println(accelgyro.testConnection() ? "MPU6050 CONECTADO" : "MPU6050 NO RESPONDE");
 
     pinMode(LED_PIN, OUTPUT);
 }
 
 void loop() {
+
     accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-    Serial.println();
+    Serial.print("Lectura [");
+    Serial.print(String(contador));
+    Serial.print("]: ");
     request.hostname = "192.168.1.51";// Local red that host the data
     request.port = 8080;
 
@@ -60,48 +67,90 @@ void loop() {
     char *z = "&z=";
     sprintf(thedata, "%s%s%s%s%d%s%d%s%d", php, id, "1",x,gx,y,gy,z,gz);
     request.path = thedata;
-    Serial.println("Guardando valores de sensores...");
+    Serial.println("\n\rGuardando valores de sensores...");
     Serial.println(thedata);
     // Get request
     http.get(request, response, headers);
-
     //delay(200);
     //Serial.print("Application>\tResponse status: ");
     Serial.println(response.status);
-
     //Serial.print("Application>\tHTTP Response Body: ");
     Serial.println(response.body);
   //===========================================================
-  Serial.println();
+
   char thedata2[64]; // La pagina web
+
   char *php2="/leer.php";
   sprintf(thedata2,"%s",php2);
+  request.path=thedata2;
   Serial.println("La lectura de la pagina web...");
   Serial.println(thedata2);
-  http.post(request,response,headers);
+  http.get(request,response,headers);
 
   //Serial.print("Application>\tResponse status: ");
-  Serial.println(response.status);
+  //Serial.println(response.status);
   //Serial.print("Application>\tHTTP Response Body: ");
   content = response.body;
   //content.concat(character);
   //Serial.println(String(character));
-  Serial.print(content);
-
+  //Serial.print(content);
+  //===========================================================
   if (content[0]=='0')
   {
+    Serial.print("El valor de content es: ");
+    Serial.println(content[0]);
     valor=0;
+  }
+  else if (content[0]=='1')
+  {
+    Serial.print("El valor de content es: ");
+    Serial.println(content[0]);
+    valor=1;
+  }
+  else{
+    Serial.print("El valor de content no es 0 ni 1.");
+  }
+  Serial.println(String(valor));
+  if (valor==1)
+  {
+    //Prender alarma
+    Serial.println("\t ALARMA PRENDIDA");
+     tone(tonePins[4], 900,500);
+  }
+  else if (valor==0)
+  {
+    Serial.println("\t ALARMA APAGADA");
+    // tone(tonePins[4], 900,1);
+    //Apagar alarma
   }
   else
   {
-    valor=1;
+
   }
-  Serial.println(String(valor));
 
     //===========================================================
     // blink LED to indicate activity
     blinkState = !blinkState;
     digitalWrite(LED_PIN, blinkState);
+
+
+    //===========================================================
+    //delay(3000);
+      Serial.write(27);       // ESC command
+      //Serial.print("[2J");    // clear screen command
+      //Serial.write(27);
+      Serial.print("[H");     // cursor to home command
+      if (contador==1)
+      {
+        Serial.write(27);
+        Serial.print("[2J");    // clear screen command
+        Serial.write(27);
+
+      }
+
+  //===========================================================
+
+  //===========================================================
 
     contador++;
 }
