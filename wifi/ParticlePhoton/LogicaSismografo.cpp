@@ -67,10 +67,12 @@ void loop() {
     if (log10(modulo)>=3)
     {
       estado=1;
+       tone(tonePins[4], 900);
     }
     else
     {
       estado=0;
+      noTone(tonePins[4]);
     }
 
 
@@ -90,6 +92,9 @@ void loop() {
     // Get request
     http.get(request, response, headers);
     //delay(200);
+    //===========================================================
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+      //===========================================================
     //Serial.print("Application>\tResponse status: ");
     Serial.println(response.status);
     //Serial.print("Application>\tHTTP Response Body: ");
@@ -104,7 +109,9 @@ void loop() {
   Serial.println("La lectura de la pagina web...");
   Serial.println(thedata2);
   http.get(request,response,headers);
-
+  //===========================================================
+    accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+    //===========================================================
   //Serial.print("Application>\tResponse status: ");
   //Serial.println(response.status);
   //Serial.print("Application>\tHTTP Response Body: ");
@@ -133,17 +140,17 @@ void loop() {
   {
     //Prender alarma
     Serial.println("\t ALARMA PRENDIDA");
-     tone(tonePins[4], 900,500);
+     tone(tonePins[4], 900);
   }
   else if (valor==0)
   {
     Serial.println("\t ALARMA APAGADA");
-    // tone(tonePins[4], 900,1);
+    noTone(tonePins[4]);
     //Apagar alarma
   }
   else
   {
-
+     noTone(tonePins[4]);
   }
 
     //===========================================================
