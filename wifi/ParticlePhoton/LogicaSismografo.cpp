@@ -1,6 +1,7 @@
 #include <I2Cdev.h>
 #include <MPU6050.h>
 #include <HttpClient.h>
+#include <math.h>
 #if (I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE) && !defined (PARTICLE)
 #include "Wire.h"
 #endif
@@ -8,6 +9,8 @@ MPU6050 accelgyro;
 HttpClient http;
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
+int estado;
+double modulo;
 int valor;
 String content = "";
 char character;
@@ -57,15 +60,30 @@ void loop() {
     Serial.print("]: ");
     request.hostname = "192.168.1.51";// Local red that host the data
     request.port = 8080;
+    //===========================================================
 
+    modulo=sqrt(pow(gx,2)+pow(gy,2)+(gz,2));
+
+    if (log10(modulo)>=3)
+    {
+      estado=1;
+    }
+    else
+    {
+      estado=0;
+    }
+
+
+    //===========================================================
     // the path including variables for GET
-    char thedata[64];
+    char thedata[100];
     char *php = "/enviar2.php";
     char *id = "?id=";
     char *x = "&x=";
     char *y = "&y=";
     char *z = "&z=";
-    sprintf(thedata, "%s%s%s%s%d%s%d%s%d", php, id, "1",x,gx,y,gy,z,gz);
+    char *e="&e=";
+    sprintf(thedata, "%s%s%s%s%d%s%d%s%d%s%i", php, id, "1",x,gx,y,gy,z,gz,e,estado);
     request.path = thedata;
     Serial.println("\n\rGuardando valores de sensores...");
     Serial.println(thedata);
