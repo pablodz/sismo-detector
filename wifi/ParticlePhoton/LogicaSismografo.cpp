@@ -51,14 +51,22 @@ void setup() {
 
     pinMode(LED_PIN, OUTPUT);
 }
+void prenderAltavoz()
+{
+  tone(tonePins[4], 900);
+}
+void apagarAltavoz()
+{
+  noTone(tonePins[4]);
+}
 
 void loop() {
 
     accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-    Serial.print("Lectura [");
+    Serial.print("Sismografo v3.1 -Pablo Diaz-Lectura [");
     Serial.print(String(contador));
     Serial.print("]: ");
-    request.hostname = "192.168.1.51";// Local red that host the data
+    request.hostname = "10.100.96.252";// Local red that host the data
     request.port = 8080;
     //===========================================================
 
@@ -67,12 +75,11 @@ void loop() {
     if (log10(modulo)>=3)
     {
       estado=1;
-       tone(tonePins[4], 900);
+       prenderAltavoz();
     }
     else
     {
       estado=0;
-      noTone(tonePins[4]);
     }
 
 
@@ -125,32 +132,36 @@ void loop() {
     Serial.print("El valor de content es: ");
     Serial.println(content[0]);
     valor=0;
+
   }
   else if (content[0]=='1')
   {
     Serial.print("El valor de content es: ");
     Serial.println(content[0]);
     valor=1;
+    //prenderAltavoz();
+
   }
   else{
     Serial.print("El valor de content no es 0 ni 1.");
+    //noTone(tonePins[4]);
   }
   Serial.println(String(valor));
   if (valor==1)
   {
     //Prender alarma
     Serial.println("\t ALARMA PRENDIDA");
-     tone(tonePins[4], 900);
+    prenderAltavoz();
   }
   else if (valor==0)
   {
     Serial.println("\t ALARMA APAGADA");
-    noTone(tonePins[4]);
+    apagarAltavoz();
     //Apagar alarma
   }
   else
   {
-     noTone(tonePins[4]);
+     //noTone(tonePins[4]);
   }
 
     //===========================================================
