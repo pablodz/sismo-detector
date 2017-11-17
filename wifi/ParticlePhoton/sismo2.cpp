@@ -140,7 +140,6 @@ void loop() {
   }else if (content[1]=='2')
   {
     valor=2;
-    estado=2;
   }
   else{
     Serial.print("El valor de content no es 0 ni 1.");
