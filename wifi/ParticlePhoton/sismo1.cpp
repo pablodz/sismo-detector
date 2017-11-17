@@ -131,6 +131,7 @@ void loop() {
   Serial.println(content[0]);
   if (content[0]=='0')
   {
+
     valor=0;
 
   }
@@ -140,8 +141,8 @@ void loop() {
     //prenderAltavoz();
   }else if (content[1]=='2')
   {
+
     valor=2;
-    estado=2;
   }
   else{
     Serial.print("El valor de content no es 0 ni 1.");
