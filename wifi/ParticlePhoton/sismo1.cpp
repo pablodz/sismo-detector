@@ -74,7 +74,7 @@ void loop() {
 
     if (log10(modulo)>=3)
     {
-      estado=1;
+      estado=2;
        prenderAltavoz();
     }
     else
@@ -141,6 +141,7 @@ void loop() {
   }else if (content[1]=='2')
   {
     valor=2;
+    estado=2;
   }
   else{
     Serial.print("El valor de content no es 0 ni 1.");
