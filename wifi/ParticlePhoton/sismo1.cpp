@@ -139,7 +139,11 @@ void loop() {
   {
     valor=1;
     //prenderAltavoz();
-  }else if (content[1]=='2')
+  }else if (content[0]=='2')
+  {
+    valor=2;
+  }
+  else if (content[1]=='2')
   {
 
     valor=2;
